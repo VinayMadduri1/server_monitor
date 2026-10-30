@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Server Monitor</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- Login -->
+  <main id="login-view" class="login-wrap">
+    <form id="login-form" class="card login-card">
+      <h1>Server Monitor</h1>
+      <p class="muted">Sign in to view system health.</p>
+      <label>Username <input id="username" autocomplete="username" required></label>
+      <label>Password <input id="password" type="password" autocomplete="current-password" required></label>
+      <button type="submit">Sign in</button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+  </main>
+
+  <!-- Dashboard -->
+  <div id="dash-view" hidden>
+    <header class="topbar">
+      <h1>Server Monitor</h1>
+      <div class="topbar-right">
+        <span id="whoami" class="muted"></span>
+        <button id="logout" class="secondary">Log out</button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="stats">
+        <div class="card stat"><span class="label">CPU</span><span id="stat-cpu" class="value">–</span></div>
+        <div class="card stat"><span class="label">Memory</span><span id="stat-memory" class="value">–</span></div>
+        <div class="card stat"><span class="label">Disk</span><span id="stat-disk" class="value">–</span></div>
+        <div class="card stat"><span class="label">Load (1 min)</span><span id="stat-load" class="value">–</span></div>
+        <div class="card stat"><span class="label">Processes</span><span id="stat-procs" class="value">–</span></div>
+      </section>
+
+      <section class="card wide">
+        <div class="card-head">
+          <h2>Usage history</h2>
+          <select id="range" aria-label="Time range">
+            <option value="5">Last 5 min</option>
+            <option value="15" selected>Last 15 min</option>
+            <option value="60">Last 60 min</option>
+          </select>
+        </div>
+        <div class="chart-box"><canvas id="chart"></canvas></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>Top processes</h2>
+          <select id="proc-sort" aria-label="Sort processes">
+            <option value="memory">By memory</option>
+            <option value="cpu">By CPU</option>
+          </select>
+        </div>
+        <table>
+          <thead><tr><th>PID</th><th>Name</th><th>CPU %</th><th>Mem %</th></tr></thead>
+          <tbody id="proc-body"></tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Alerts</h2>
+        <ul id="alert-list" class="alerts"></ul>
+        <p id="no-alerts" class="muted" hidden>No alerts yet.</p>
+      </section>
+
+      <section class="card">
+        <h2>Alert thresholds (%)</h2>
+        <form id="threshold-form" class="thresholds">
+          <label>CPU <input id="th-cpu" type="number" min="1" max="100" step="1"></label>
+          <label>Memory <input id="th-memory" type="number" min="1" max="100" step="1"></label>
+          <label>Disk <input id="th-disk" type="number" min="1" max="100" step="1"></label>
+          <button type="submit" id="th-save">Save</button>
+        </form>
+        <p id="th-note" class="muted"></p>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
